@@ -1,10 +1,13 @@
-per_cent = {'ТКБ': 5.6, 'СКБ': 5.9, 'ВТБ': 4.28, 'СБЕР': 4.0}
-money = int((input("Введите сумму вклада:")))
-deposit=[]
-deposit.append(int(per_cent["ТКБ"]*money/100))
-deposit.append(int(per_cent["СКБ"]*money/100))
-deposit.append(int(per_cent["ВТБ"]*money/100))
-deposit.append(int(per_cent["СБЕР"]*money/100))
-print("deposit [ТКБ, СКБ, ВТБ, СБЕР]=",deposit)
-print("Максимальная сумма которую вы можете заработать-",max(deposit))
+zarplata={"БТК":250, "ММФ":230, "ЖЭУ":150 }
+chasi=int((input("Введите колличество рабочих часов:")))
+itogo=[]
+itogo.append(int(zarplata["БТК"]*chasi))
+itogo.append(int(zarplata["ММФ"]*chasi))
+itogo.append(int(zarplata["ЖЭУ"]*chasi))
+print("Итоговая зарплата без вычета налога:",itogo )
+itogo=float(input("Введите оклад без вычета налога:"))
+procent=float(input("Введите ставку подаходного налога:"))
+nalog=itogo*procent/100
+summa=itogo-nalog
+print("Итоговая зарплата после вычета налога:",summa)
 
