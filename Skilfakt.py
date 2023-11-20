@@ -1,76 +1,52 @@
-N_max = int(input("Определите размер очереди:"))
+G = {"Адмиралтейская" :
+         {"Садовая" : 4},
+     "Садовая" :
+         {"Сенная площадь" : 3,
+          "Спасская" : 3,
+          "Адмиралтейская" : 4,
+          "Звенигородская" : 5},
+     "Сенная площадь" :
+         {"Садовая" : 3,
+          "Спасская" : 3},
+     "Спасская" :
+         {"Садовая" : 3,
+          "Сенная площадь" : 3,
+          "Достоевская" : 4},
+     "Звенигородская" :
+         {"Пушкинская" : 3,
+          "Садовая" : 5},
+     "Пушкинская" :
+         {"Звенигородская" : 3,
+          "Владимирская" : 4},
+     "Владимирская" :
+         {"Достоевская" : 3,
+          "Пушкинская" : 4},
+     "Достоевская" :
+         {"Владимирская" : 3,
+          "Спасская" : 4}}
 
-queue = [0 for _ in range(N_max)]
-order = 0
-head = 0
-tail = 0
-
-
-def is_empty():
-    return head == tail and queue[head] == 0
-
-
-def size():
-    if is_empty():
-        return 0
-    elif head == tail:
-        return N_max
-    elif head > tail:
-        return N_max - head + tail
-    else:
-        return tail - head
-
-
-def add():
-    global tail, order
-    order += 1
-    queue[tail] = order
-    print("Задача №%d добавлена" % (queue[tail]))
-    tail = (tail + 1) % N_max
-
-
-def show():
-    print("Задача №%d в приоритете" % (queue[head]))
-
-
-def do():
-    global head
-    print("Задача №%d выполнена" % (queue[head]))
-    queue[head] = 0
-    head = (head + 1) % N_max
+D = {k : 100 for k in G.keys()} # расстояния
+P = {k : None for k in G.keys()}
+start_k = 'Адмиралтейская' # стартовая вершина
+D[start_k] = 0 # расстояние от неё до самой себя равно нулю
+U = {k : False for k in G.keys()} # флаги просмотра вершин
+P = {k : None for k in G.keys()} # предки
 
 
-while True:
-    cmd = input("Введите команду:")
-    if cmd == "empty":
-        if is_empty():
-            print("Очередь пустая")
-        else:
-            print("В очереди есть задачи")
-    elif cmd == "size":
-        print("Количество задач в очереди:", size())
-    elif cmd == "add":
-        if size() != N_max:
-            add()
-        else:
-            print("Очередь переполнена")
-    elif cmd == "show":
-        if is_empty():
-            print("Очередь пустая")
-        else:
-            show()
-    elif cmd == "do":
-        if is_empty():
-            print("Очередь пустая")
-        else:
-            do()
-    elif cmd == "exit":
-        for _ in range(size()):
-            do()
-        print("Очередь пустая. Завершение работы")
-        break
-    else:
-        print("Введена неверная команда")
+for _ in range(len(D)):
+    # выбираем среди непросмотренных наименьшее по расстоянию
+    min_k = min([k for k in U.keys() if not U[k]], key = lambda x: D[x])
+
+    for v in G[min_k].keys(): # проходимся по всем смежным вершинам
+        if D[v] > D[min_k] + G[min_k][v]:  # если расстояние от текущей вершины меньше
+            D[v] = min(D[v], D[min_k] + G[min_k][v]) # минимум
+            P[v] = min_k # и записываем как предок
+    U[min_k] = True # просмотренную вершину помечаем
+pointer = "Владимирская" # куда должны прийти
+while pointer is not None: # перемещаемся, пока не придём в стартовую точку
+    print(pointer)
+    pointer = P[pointer]
+
 
 
 
